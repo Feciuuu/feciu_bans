@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container" style="display: none">
+      <h1 class="header">Zostałeś/aś zbanowany/a</h1>
+      <div class="time" style="margin-top: -5px">
+        CZAS BANA
+        <span style="color: red" class="timeRemaining">22H 48MIN 4S</span>
+      </div>
+      <div class="zacheta">
+        Możesz skrócić czas bana wykonująć czynności lub wykupić się na
+        indrop.gg/s/rekawdupiemurzynka
+      </div>
+    </div>
+  </body>
+  <script>
+    window.addEventListener("message", (event) => {
+      if (event.data.updateTime) {
+        $(".container").fadeIn(200);
+
+        const unixTime = event.data.unixTime;
+        const oldTime = event.data.tempTime;
+        const newTime = unixTime - oldTime;
+
+        const hours = Math.floor(newTime / 3600);
+        const minutes = Math.floor((newTime % 3600) / 60);
+        const seconds = newTime % 60;
+        $(".timeRemaining").text(`${hours}H ${minutes}MIN ${seconds}S`);
+      } else if (event.data.hide) {
+        $(".container").fadeOut(200);
+      }
+    });
+  </script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+    * {
+      font-weight: bold;
+      font-family: "Poppins";
+      color: white;
+    }
+    .container {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 280px;
+      height: 90px;
+      border-radius: 5px;
+      border: 1px solid rgb(0, 132, 255, 0.699);
+      background-color: rgba(37, 37, 37, 0.699);
+    }
+
+    .header {
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .time {
+      font-size: 11px;
+    }
+
+    .zacheta {
+      font-size: 10px;
+    }
+  </style>
+</html>

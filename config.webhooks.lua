@@ -1,0 +1,4 @@
+Config.Webhooks = {
+    ["ban"] = "",
+    ["unban"] = ""
+}
