@@ -21,3 +21,5 @@ ui_page 'index.html'
 files {
     'index.html',
 }
+
+dependency "feciu_minigames"
