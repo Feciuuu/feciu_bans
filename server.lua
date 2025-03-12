@@ -21,7 +21,7 @@ ESX.RegisterCommand('banid_p',
         local current_time = os.time()
         local new_time = current_time + (3600 * czasbana)
         Bans[args.id.source] = new_time
-        TriggerClientEvent("dostalBana", bannedPlayer.source, new_time, current_time, Config.SoloSession)
+        TriggerClientEvent("dostalBana", bannedPlayer.source, new_time, current_time)
         local discord = GetPlayerIdentifierByType(bannedPlayer.source, "discord") and GetPlayerIdentifierByType(bannedPlayer.source, "discord"):gsub("discord:", "") or "Brak"
         PerformHttpRequest(Config.Webhooks["ban"], function(err, text, headers) end, 'POST', json.encode({
             username = "Ban System",
@@ -179,7 +179,7 @@ RegisterNetEvent("esx:playerLoaded", function(source)
         else
             SetPlayerRoutingBucket(source, 0)
         end
-        TriggerClientEvent("dostalBana", source, new_time, current_time, Config.SoloSession)
+        TriggerClientEvent("dostalBana", source, result[1].time, os.time())
     end
 end)
 

@@ -3,7 +3,7 @@ ESX          = exports['es_extended']:getSharedObject()
 local time   = 0
 
 
-RegisterNetEvent("dostalBana", function(unixTime, tempTime, isSolo)
+RegisterNetEvent("dostalBana", function(unixTime, tempTime)
     CreateThread(function()
         hasBan = true
         time = unixTime
