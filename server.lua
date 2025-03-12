@@ -10,13 +10,18 @@ ESX.RegisterCommand('banid_p',
         local czasbana = args.czas
         local powod = args.powod
         bannedPlayer.setCoords(Config.Coords["ban"])
+        if Config.SoloSession then
+            SetPlayerRoutingBucket(bannedPlayer.source, bannedPlayer.source)
+        else
+            SetPlayerRoutingBucket(bannedPlayer.source, 0) 
+        end
         bannedPlayer.showNotification("Otrzymałeś bana na " .. (czasbana == 1 and
             czasbana .. " godzine" or czasbana .. " godzin"))
 
         local current_time = os.time()
         local new_time = current_time + (3600 * czasbana)
         Bans[args.id.source] = new_time
-        TriggerClientEvent("dostalBana", bannedPlayer.source, new_time, current_time)
+        TriggerClientEvent("dostalBana", bannedPlayer.source, new_time, current_time, Config.SoloSession)
         local discord = GetPlayerIdentifierByType(bannedPlayer.source, "discord") and GetPlayerIdentifierByType(bannedPlayer.source, "discord"):gsub("discord:", "") or "Brak"
         PerformHttpRequest(Config.Webhooks["ban"], function(err, text, headers) end, 'POST', json.encode({
             username = "Ban System",
@@ -103,10 +108,11 @@ end, true, {
     }
 })
 
-ESX.RegisterCommand("unbanid_p", { "best" }, function(xPlayer, args, showError)
+ESX.RegisterCommand("unbanid_p", {"best"}, function(xPlayer, args, showError)
     local bannedPlayer = args.id
     TriggerClientEvent("unbanikxpp", bannedPlayer.source)
-    local discord  = GetPlayerIdentifierByType(bannedPlayer.source, "discord") and GetPlayerIdentifierByType(bannedPlayer.source, "discord"):gsub("discord:", "") or "Brak"
+    SetPlayerRoutingBucket(bannedPlayer.source, 0)
+    local discord = GetPlayerIdentifierByType(bannedPlayer.source, "discord") and GetPlayerIdentifierByType(bannedPlayer.source, "discord"):gsub("discord:", "") or "Brak"
 
     PerformHttpRequest(Config.Webhooks["unban"], function(err, text, headers) end, 'POST', json.encode({
         username = "Ban System",
@@ -118,8 +124,7 @@ ESX.RegisterCommand("unbanid_p", { "best" }, function(xPlayer, args, showError)
                 color = 16711680,
             }
         }
-    }),
-    { ['Content-Type'] = 'application/json' })
+    }), { ['Content-Type'] = 'application/json' })
 end, true, {
     help = "Odbanuj Gracza",
     validate = true,
@@ -140,6 +145,7 @@ function RemoveBan(id)
     Bans[id] = nil
     local id = id
     local player = ESX.GetPlayerFromId(id)
+    SetPlayerRoutingBucket(id, 0) 
 
     player.setCoords(Config.Coords["unban"])
 
@@ -168,7 +174,12 @@ RegisterNetEvent("esx:playerLoaded", function(source)
 
     if result and result[1] then
         Bans[source] = result[1].time
-        TriggerClientEvent("dostalBana", source, result[1].time, os.time())
+        if Config.SoloSession then
+            SetPlayerRoutingBucket(source, source)
+        else
+            SetPlayerRoutingBucket(source, 0)
+        end
+        TriggerClientEvent("dostalBana", bannedPlayer.source, new_time, current_time, Config.SoloSession)
     end
 end)
 

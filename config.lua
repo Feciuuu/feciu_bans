@@ -1,5 +1,7 @@
 Config = {}
 
+Config.SoloSession = true  
+
 Config.Coords = {
     ["ban"] = vector3(1073.0, -3102.49, -39.0),
     ["unban"] = vector3(1006.57, -2503.58, 28.30),
