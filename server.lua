@@ -179,7 +179,7 @@ RegisterNetEvent("esx:playerLoaded", function(source)
         else
             SetPlayerRoutingBucket(source, 0)
         end
-        TriggerClientEvent("dostalBana", bannedPlayer.source, new_time, current_time, Config.SoloSession)
+        TriggerClientEvent("dostalBana", source, new_time, current_time, Config.SoloSession)
     end
 end)
 
